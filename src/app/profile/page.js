@@ -6,7 +6,6 @@ import Header from "../../../components/Header"
 import supabase from "../../../lib/supabaseClient"
 import styles from "./page.module.css"
 import FullPageLoader from "../../../components/FullPageLoader"
-import Link from "next/link"
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -184,7 +183,7 @@ export default function ProfilePage() {
                   <div className={styles.emptyState}>
                     <h3>No orders yet</h3>
                     <p>When you place orders, they will appear here.</p>
-                    <Link className="btn btn-primary" href="/products">Start Shopping</Link>
+                    <a className="btn btn-primary" href="/products">Start Shopping</a>
                   </div>
                 ) : (
                   <div className={styles.ordersList}>
@@ -233,7 +232,7 @@ export default function ProfilePage() {
                   <div className={styles.emptyState}>
                     <h3>Your wishlist is empty</h3>
                     <p>Browse products and add items to your wishlist.</p>
-                    <Link className="btn btn-primary" href="/products">Browse Products</Link>
+                    <a className="btn btn-primary" href="/products">Browse Products</a>
                   </div>
                 ) : (
                   <div className={styles.ordersList}>
@@ -245,7 +244,7 @@ export default function ProfilePage() {
                           <p>₦{Number(w.products?.price || 0).toLocaleString()}</p>
                         </div>
                         <div className={styles.orderActions}>
-                          <Link href={`/products/${w.product_id}`} className="btn btn-secondary">View</Link>
+                          <a href={`/products/${w.product_id}`} className="btn btn-secondary">View</a>
                         </div>
                       </div>
                     ))}

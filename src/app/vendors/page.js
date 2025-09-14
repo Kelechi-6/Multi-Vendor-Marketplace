@@ -81,7 +81,7 @@ export default function VendorDashboardPage() {
 
         <div style={{ marginTop: "2rem" }}>
           {products.length === 0 ? (
-            <div>No products yet. Click &quot;Add Product&quot; to create your first item.</div>
+            <div>No products yet. Click "Add Product" to create your first item.</div>
           ) : (
             <div style={{ display: "grid", gap: "1rem" }}>
               {products.map(p => (

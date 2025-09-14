@@ -5,7 +5,6 @@ import styles from "./page.module.css"
 import supabase from "../../lib/supabaseClient"
 import { useCart } from "../../contexts/CartContext"
 import FullPageLoader from "../../components/FullPageLoader"
-import Link from "next/link"
 
 export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([])
@@ -85,15 +84,15 @@ export default function HomePage() {
               </h1>
               <p className={styles.heroSubtitle}>
                 Discover amazing products from trusted vendors around the world. Shop with confidence and find exactly
-                what you&apos;re looking for.
+                what you're looking for.
               </p>
               <div className={styles.heroActions}>
-                <Link href="/products" className="btn btn-primary">
+                <a href="/products" className="btn btn-primary">
                   Shop Now
-                </Link>
-                <Link href="/vendors/register" className="btn btn-secondary">
+                </a>
+                <a href="/vendors/register" className="btn btn-secondary">
                   Become a Vendor
-                </Link>
+                </a>
               </div>
             </div>
             <div className={styles.heroImage}>
@@ -155,8 +154,8 @@ export default function HomePage() {
             <div className={styles.vendorEmpty}>
               <p>No vendors to show yet.</p>
               <div className={styles.vendorCtas}>
-                <Link href="/stores" className="btn btn-secondary">Browse Vendors</Link>
-                <Link href="/vendors/register" className="btn btn-primary">Become a Vendor</Link>
+                <a href="/stores" className="btn btn-secondary">Browse Vendors</a>
+                <a href="/vendors/register" className="btn btn-primary">Become a Vendor</a>
               </div>
             </div>
           ) : (
@@ -172,7 +171,7 @@ export default function HomePage() {
                       <p className={styles.vendorMeta}>{vendor.business_type}</p>
                     )}
                     <p className={styles.vendorDescription}>{vendor.bio || ""}</p>
-                    <Link href={`/stores/${vendor.id}`} className="btn btn-primary">View Store</Link>
+                    <a href={`/stores/${vendor.id}`} className="btn btn-primary">View Store</a>
                   </div>
                 </div>
               ))}
@@ -193,16 +192,16 @@ export default function HomePage() {
               <h4>Quick Links</h4>
               <ul>
                 <li>
-                  <Link href="/about">About Us</Link>
+                  <a href="/about">About Us</a>
                 </li>
                 <li>
-                  <Link href="/contact">Contact</Link>
+                  <a href="/contact">Contact</a>
                 </li>
                 <li>
-                  <Link href="/help">Help Center</Link>
+                  <a href="/help">Help Center</a>
                 </li>
                 <li>
-                  <Link href="/terms">Terms of Service</Link>
+                  <a href="/terms">Terms of Service</a>
                 </li>
               </ul>
             </div>
@@ -210,13 +209,13 @@ export default function HomePage() {
               <h4>For Vendors</h4>
               <ul>
                 <li>
-                  <Link href="/vendors/register">Become a Vendor</Link>
+                  <a href="/vendors/register">Become a Vendor</a>
                 </li>
                 <li>
-                  <Link href="/vendors/login">Vendor Login</Link>
+                  <a href="/vendors/login">Vendor Login</a>
                 </li>
                 <li>
-                  <Link href="/vendors/help">Vendor Help</Link>
+                  <a href="/vendors/help">Vendor Help</a>
                 </li>
               </ul>
             </div>
@@ -224,13 +223,13 @@ export default function HomePage() {
               <h4>Customer Service</h4>
               <ul>
                 <li>
-                  <Link href="/shipping">Shipping Info</Link>
+                  <a href="/shipping">Shipping Info</a>
                 </li>
                 <li>
-                  <Link href="/returns">Returns</Link>
+                  <a href="/returns">Returns</a>
                 </li>
                 <li>
-                  <Link href="/faq">FAQ</Link>
+                  <a href="/faq">FAQ</a>
                 </li>
               </ul>
             </div>
