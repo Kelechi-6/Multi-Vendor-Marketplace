@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import supabase from "../../../lib/supabaseClient"
 import Header from "../../../components/Header"
+import Link from "next/link"
 import styles from "./page.module.css"
 
 export default function LoginPage() {
@@ -139,9 +140,9 @@ export default function LoginPage() {
                 Remember me
               </label>
 
-              <a href="/forgot-password" className={styles.forgotLink}>
+              <Link href="/forgot-password" className={styles.forgotLink}>
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             <button
@@ -154,13 +155,13 @@ export default function LoginPage() {
 
             <div className={styles.registerLink}>
               <p>
-                Don't have an account? <a href="/register">Create one here</a>
+                Don&apos;t have an account? <Link href="/register">Create one here</Link>
               </p>
             </div>
 
             <div className={styles.vendorLink}>
               <p>
-                Are you a vendor? <a href="/vendors/login">Vendor Login</a>
+                Are you a vendor? <Link href="/vendors/login">Vendor Login</Link>
               </p>
             </div>
           </form>

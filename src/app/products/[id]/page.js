@@ -6,6 +6,7 @@ import styles from "./page.module.css"
 import supabase from "../../../../lib/supabaseClient"
 import { useCart } from "../../../../contexts/CartContext"
 import FullPageLoader from "../../../../components/FullPageLoader"
+import Link from "next/link"
 
 export default function ProductDetailPage({ params }) {
   const id = params.id
@@ -75,9 +76,9 @@ export default function ProductDetailPage({ params }) {
         ) : product ? (
           <>
             <nav className={styles.breadcrumb}>
-              <a href="/">Home</a>
+              <Link href="/">Home</Link>
               <span>/</span>
-              <a href="/products">Products</a>
+              <Link href="/products">Products</Link>
               <span>/</span>
               <span>{product.name}</span>
             </nav>
@@ -148,7 +149,7 @@ export default function ProductDetailPage({ params }) {
                       <img src={rp.image_url || "/placeholder.svg"} alt={rp.name} />
                       <h4>{rp.name}</h4>
                       <div className={styles.relatedPrice}>₦{Number(rp.price || 0).toLocaleString()}</div>
-                      <a href={`/products/${rp.id}`} className="btn btn-primary">View Product</a>
+                      <Link href={`/products/${rp.id}`} className="btn btn-primary">View Product</Link>
                     </div>
                   ))}
                 </div>

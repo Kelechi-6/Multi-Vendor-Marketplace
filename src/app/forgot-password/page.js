@@ -4,6 +4,7 @@ import { useState } from "react"
 import Header from "../../../components/Header"
 import supabase from "../../../lib/supabaseClient"
 import FullPageLoader from "../../../components/FullPageLoader"
+import Link from "next/link"
 import styles from "./page.module.css"
 
 export default function ForgotPasswordPage() {
@@ -36,7 +37,7 @@ export default function ForgotPasswordPage() {
         <div className={styles.container}>
           <div className={styles.header}>
             <h1 className={styles.title}>Forgot Password</h1>
-            <p className={styles.subtitle}>Enter your email and we'll send you a secure link to reset your password.</p>
+            <p className={styles.subtitle}>Enter your email and we&apos;ll send you a secure link to reset your password.</p>
           </div>
           {status.message && (
             <div className={`${styles.message} ${status.message.includes('sent') ? styles.success : styles.error}`}>
@@ -57,8 +58,8 @@ export default function ForgotPasswordPage() {
               {status.loading ? "Sending..." : "Send Reset Link"}
             </button>
             <div className={styles.meta}>
-              <a href="/login">Back to Login</a>
-              <a href="/register">Create account</a>
+              <Link href="/login">Back to Login</Link>
+              <Link href="/register">Create account</Link>
             </div>
           </form>
         </div>
