@@ -1,0 +1,146 @@
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+.main {
+  flex: 1;
+  padding: 24px;
+  margin-left: 280px; /* width of fixed AdminSidebar */
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+}
+
+/* Added for CRUD form */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.formControl {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+}
+
+.textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.tableWrap {
+  overflow: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th, .td {
+  text-align: left;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.thead .th {
+  font-weight: 600;
+  color: var(--muted-foreground);
+  background: var(--muted);
+  border-top: none;
+}
+
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.notice {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ecfeff;
+  color: #026d74;
+  border: 1px solid #a5f3fc;
+}
+
+.cardList { display: grid; gap: 12px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badgePending { background: #fef3c7; color: #92400e; }
+.badgeCompleted { background: #d1fae5; color: #065f46; }
+.badgeShipped { background: #dbeafe; color: #1e40af; }
+
+.actions { display: flex; gap: 8px; }
+
+.btnSm {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.btnPrimary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btnDanger { background: var(--destructive); color: #fff; border-color: var(--destructive); }
+
+@media (max-width: 768px) {
+  .main { margin-left: 0; padding: 16px; }
+  .formGrid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,516 @@
+.profilePage {
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+.profileContainer {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem 0 4rem;
+  min-height: calc(100vh - 120px);
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.125rem;
+  color: var(--muted-foreground);
+}
+
+/* Profile Sidebar */
+.profileSidebar {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.userInfo {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.userInfo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.userInfo h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.userInfo p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.joinDate {
+  font-size: 0.75rem !important;
+  color: var(--muted-foreground) !important;
+}
+
+.profileNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.navItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: var(--muted-foreground);
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.navItem:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.navItem.active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.logoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: var(--muted-foreground);
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.logoutBtn:hover {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+/* Profile Main */
+.profileMain {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionHeader h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.sectionHeader p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+/* Profile Information */
+.profileCard {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.profileField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profileField label {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.profileField span {
+  color: var(--foreground);
+  font-size: 1rem;
+  padding: 0.75rem;
+  background-color: var(--muted);
+  border-radius: var(--radius);
+}
+
+/* Orders */
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.orderCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background-color: var(--background);
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.orderInfo h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+}
+
+.orderInfo p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.orderStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.statusPending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.statusShipped {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.statusDelivered {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.orderTotal {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.orderItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--muted);
+  border-radius: var(--radius);
+}
+
+.orderItem img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.itemInfo h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+}
+
+.itemInfo p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.orderActions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Empty States */
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--muted-foreground);
+}
+
+.emptyState h3 {
+  font-size: 1.25rem;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.emptyState p {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Addresses */
+.addressesList {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.addressCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background-color: var(--background);
+}
+
+.addressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.addressHeader h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.defaultBadge {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.addressInfo {
+  margin-bottom: 1.5rem;
+}
+
+.addressInfo p {
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+  line-height: 1.5;
+}
+
+.addressActions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Form Styles */
+.profileField input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.profileField input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+}
+
+.profileField input.error {
+  border-color: var(--destructive);
+}
+
+.errorText {
+  color: var(--destructive);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.errorMessage {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.successMessage {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.formActions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.formActions .btn-secondary {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.formActions .btn-secondary:hover {
+  background-color: var(--border);
+}
+
+.formActions .btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.formActions .btn-primary:hover {
+  opacity: 0.9;
+}
+
+.formActions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .profileContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .profileSidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .userInfo {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    text-align: left;
+  }
+
+  .userInfo img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+
+  .profileNav {
+    flex-direction: row;
+    margin-bottom: 0;
+    gap: 0.25rem;
+  }
+
+  .navItem {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .logoutBtn {
+    border-top: none;
+    padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .profileContainer {
+    padding: 1rem 0 2rem;
+  }
+
+  .profileMain {
+    padding: 1rem;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .orderHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .orderStatus {
+    align-items: flex-start;
+  }
+
+  .orderActions {
+    flex-direction: column;
+  }
+
+  .addressActions {
+    flex-direction: column;
+  }
+}

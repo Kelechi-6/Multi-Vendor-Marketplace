@@ -1,0 +1,102 @@
+.sidebar {
+  background-color: var(--card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sidebarHeader {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebarHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.navItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  color: var(--muted-foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.navItem:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.navItem.active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.navIcon {
+  font-size: 1.25rem;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navLabel {
+  font-weight: 500;
+}
+
+.sidebarFooter {
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.logoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  color: var(--muted-foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.logoutBtn:hover {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    top: 80px;
+    left: -280px;
+    width: 280px;
+    height: calc(100vh - 80px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+}

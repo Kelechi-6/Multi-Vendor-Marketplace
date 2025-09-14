@@ -1,0 +1,195 @@
+.loginPage {
+  min-height: 100vh;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+}
+
+.loginContainer {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem 0;
+}
+
+.loginHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.loginHeader h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.loginHeader p {
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+.loginForm {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.errorMessage {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--input);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.formGroup input.error {
+  border-color: var(--destructive);
+}
+
+.errorText {
+  color: var(--destructive);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.formOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark::after {
+  content: "✓";
+  color: var(--primary-foreground);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.forgotLink {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.registerLink,
+.vendorLink {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.registerLink p,
+.vendorLink p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.registerLink a,
+.vendorLink a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.registerLink a:hover,
+.vendorLink a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .loginContainer {
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+
+  .loginForm {
+    padding: 1.5rem;
+  }
+
+  .formOptions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

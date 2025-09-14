@@ -1,0 +1,200 @@
+.registerPage {
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+.registerContainer {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.registerHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.registerHeader h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.registerHeader p {
+  font-size: 1.125rem;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.registerForm {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.errorMessage {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--input);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.formGroup input.error {
+  border-color: var(--destructive);
+}
+
+.errorText {
+  color: var(--destructive);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.termsGroup {
+  margin-bottom: 2rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  margin-right: 0.75rem;
+  margin-top: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark::after {
+  content: "✓";
+  color: var(--primary-foreground);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkboxLabel a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.checkboxLabel a:hover {
+  text-decoration: underline;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loginLink,
+.vendorLink {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.loginLink p,
+.vendorLink p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.loginLink a,
+.vendorLink a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.loginLink a:hover,
+.vendorLink a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .registerContainer {
+    padding: 1rem 0 2rem;
+  }
+
+  .registerHeader h1 {
+    font-size: 2rem;
+  }
+
+  .registerForm {
+    padding: 1.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
