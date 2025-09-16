@@ -55,6 +55,21 @@ export default function ProfilePage() {
     getProfile()
   }, [user])
 
+  // Re-fetch orders when user navigates to Orders tab to reflect recent purchases
+  useEffect(() => {
+    const reload = async () => {
+      if (!user) return
+      if (activeTab !== "orders") return
+      const { data: orderRows } = await supabase
+        .from("orders")
+        .select("id, created_at, status, total_amount, products")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+      setOrders(orderRows || [])
+    }
+    reload()
+  }, [activeTab, user])
+
   // ✅ Fetch orders, wishlist, addresses
   useEffect(() => {
     const loadExtras = async () => {
@@ -63,7 +78,7 @@ export default function ProfilePage() {
       // Orders
       const { data: orderRows } = await supabase
         .from("orders")
-        .select("id, created_at, products, delete")
+        .select("id, created_at, status, total_amount, products")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
       setOrders(orderRows || [])
@@ -200,8 +215,16 @@ export default function ProfilePage() {
                               <h3>Order #{o.id.slice(0,8)}</h3>
                               <p>{new Date(o.created_at).toLocaleString()}</p>
                             </div>
+                            <div>
+                              <Link href={`/profile/orders/${o.id}`} className="btn btn-secondary">View details</Link>
+                            </div>
                             <div className={styles.orderStatus}>
-                              <span className={`${styles.status} ${styles.statusPending}`}>{o.delete ? 'Cancelled' : 'Processing'}</span>
+                              {(() => {
+                                const s = (o.status || '').toLowerCase()
+                                const cls = s === 'paid' ? styles.statusPaid : s === 'failed' ? styles.statusFailed : styles.statusPending
+                                const label = s === 'paid' ? 'Paid' : s === 'failed' ? 'Failed' : 'Processing'
+                                return <span className={`${styles.status} ${cls}`}>{label}</span>
+                              })()}
                             </div>
                           </div>
                           <div className={styles.orderItems}>
