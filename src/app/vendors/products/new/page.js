@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Header from "../../../../../components/Header"
 import supabase from "../../../../../lib/supabaseClient"
-import { uploadImageToItemsBucket } from "../../../../../lib/uploadImage"
+import { uploadVendorProductImage } from "../../../../../lib/uploadImage"
 import styles from "./page.module.css"
 
 export default function NewProductPage() {
@@ -76,7 +76,7 @@ export default function NewProductPage() {
 
       let image_url = null
       if (imageFile) {
-        const { url } = await uploadImageToItemsBucket(imageFile, user.id)
+        const { url } = await uploadVendorProductImage(imageFile, user.id)
         image_url = url
       }
 

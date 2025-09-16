@@ -6,6 +6,7 @@ import supabase from "../../../../lib/supabaseClient"
 import ProductCard from "../../../../components/ProductCard"
 import FullPageLoader from "../../../../components/FullPageLoader"
 import styles from "./../../page.module.css"
+import Link from "next/link"
 
 export default function PublicStorePage({ params }) {
   const vendorId = params.id
@@ -73,13 +74,13 @@ export default function PublicStorePage({ params }) {
                 <p style={{ margin: "6px 0", maxWidth: 720, color: "#9ca3af" }}>{vendor.bio}</p>
               )}
             </div>
-            <a href="/products" className="btn btn-secondary">Browse All Products</a>
+            <Link href="/products" className="btn btn-secondary">Browse All Products</Link>
           </div>
 
           {products.length === 0 ? (
             <div style={{ padding: "2rem 0" }}>
               <h3>No products yet</h3>
-              <p>This vendor hasn't published any products.</p>
+              <p>This vendor hasn&apos;t published any products.</p>
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 16, marginTop: 16 }}>
