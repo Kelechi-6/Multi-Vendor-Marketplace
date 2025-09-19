@@ -196,12 +196,6 @@ export default function HomePage() {
                   <Link href="/about">About Us</Link>
                 </li>
                 <li>
-                  <Link href="/contact">Contact</Link>
-                </li>
-                <li>
-                  <Link href="/help">Help Center</Link>
-                </li>
-                <li>
                   <Link href="/terms">Terms of Service</Link>
                 </li>
               </ul>
@@ -216,7 +210,7 @@ export default function HomePage() {
                   <Link href="/vendors/login">Vendor Login</Link>
                 </li>
                 <li>
-                  <Link href="/vendors/help">Vendor Help</Link>
+                  <Link href="/faq#vendor-help">Vendor Help</Link>
                 </li>
               </ul>
             </div>
@@ -224,10 +218,7 @@ export default function HomePage() {
               <h4>Customer Service</h4>
               <ul>
                 <li>
-                  <Link href="/shipping">Shipping Info</Link>
-                </li>
-                <li>
-                  <Link href="/returns">Returns</Link>
+                  <Link href="/shipping-returns">Shipping & Returns</Link>
                 </li>
                 <li>
                   <Link href="/faq">FAQ</Link>

@@ -57,7 +57,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 280px);
+  /* height: calc(100% - 280px); */
 }
 
 .productName {

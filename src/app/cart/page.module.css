@@ -149,6 +149,32 @@
   top: 2rem;
 }
 
+.addressBlock {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.addressBlock label {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.destinationRow {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.addressHint {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.formError {
+  color: var(--destructive);
+  font-size: 0.875rem;
+}
+
 .cartSummary h2 {
   color: var(--foreground);
   font-size: 1.5rem;

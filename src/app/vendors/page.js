@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import Header from "../../../components/Header"
 import supabase from "../../../lib/supabaseClient"
 import FullPageLoader from "../../../components/FullPageLoader"
 import { uploadVendorProductImage, uploadAvatarToBucket } from "../../../lib/uploadImage"
+import styles from "./page.module.css"
 
 export default function VendorDashboardPage() {
   const [loading, setLoading] = useState(true)
@@ -216,101 +218,120 @@ export default function VendorDashboardPage() {
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       <Header />
-      <div className="container" style={{ padding: "2rem 0" }}>
-        {/* Profile editor */}
-        <div style={{ display:'grid', gridTemplateColumns:'100px 1fr auto', gap:16, alignItems:'center', border:'1px solid var(--border)', padding:16, borderRadius:8, background:'var(--card)' }}>
-          <div>
-            <img src={avatarFile ? URL.createObjectURL(avatarFile) : (userProfile.avatar_url || "/user-avatar.png")} alt="Avatar" style={{ width: 100, height: 100, objectFit:'cover', borderRadius: 999, border:'1px solid var(--border)' }} />
-          </div>
-          <div style={{ display:'grid', gap:8 }}>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-              <input className="input" placeholder="Shop name" value={profileForm.shop_name} onChange={e=>setProfileForm(f=>({...f, shop_name:e.target.value}))} />
-              <input className="input" placeholder="Display name" value={profileForm.display_name} onChange={e=>setProfileForm(f=>({...f, display_name:e.target.value}))} />
+      <div className="container">
+        <div className={styles.wrapper}>
+          {/* Profile editor */}
+          <div className={styles.profileCard}>
+            <div>
+              <img
+                src={avatarFile ? URL.createObjectURL(avatarFile) : (userProfile.avatar_url || "/user-avatar.png")}
+                alt="Avatar"
+                className={styles.profileAvatar}
+              />
             </div>
-            <textarea className="textarea" rows={3} placeholder="Bio" value={profileForm.bio} onChange={e=>setProfileForm(f=>({...f, bio:e.target.value}))} />
-            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-              <input type="file" accept="image/*" onChange={e=>setAvatarFile(e.target.files?.[0] || null)} />
-              <div style={{ fontSize:12, color:'var(--muted-foreground)' }}>This picture is also used as your shop profile image.</div>
+            <div className={styles.profileFields}>
+              <div className={styles.profileTwoCol}>
+                <input className="input" placeholder="Shop name" value={profileForm.shop_name} onChange={e=>setProfileForm(f=>({...f, shop_name:e.target.value}))} />
+                <input className="input" placeholder="Display name" value={profileForm.display_name} onChange={e=>setProfileForm(f=>({...f, display_name:e.target.value}))} />
+              </div>
+              <textarea className="textarea" rows={3} placeholder="Bio" value={profileForm.bio} onChange={e=>setProfileForm(f=>({...f, bio:e.target.value}))} />
+              <div className={styles.editImageRow}>
+                <input type="file" accept="image/*" onChange={e=>setAvatarFile(e.target.files?.[0] || null)} />
+                <div className={styles.profileHint}>This picture is also used as your shop profile image.</div>
+              </div>
+            </div>
+            <div className={styles.profileActions}>
+              <button className="btn btn-primary" onClick={saveProfile} disabled={savingProfile}>{savingProfile ? 'Saving...' : 'Save Profile'}</button>
             </div>
           </div>
-          <div>
-            <button className="btn btn-primary" onClick={saveProfile} disabled={savingProfile}>{savingProfile ? 'Saving...' : 'Save Profile'}</button>
+
+          {/* Header Row */}
+          <div className={styles.headerRow}>
+            <div className={styles.headerTitle}>
+              <div className={styles.sectionDivider}>
+                <div className="line" />
+                <div>Your Products</div>
+                <div className="line" />
+              </div>
+            </div>
+            <div className={styles.headerActions}>
+              <Link href="/vendors/products/new" className="btn btn-primary">Add Product</Link>
+            </div>
           </div>
-        </div>
 
-        <div style={{ marginTop: 20, display:'flex', alignItems:'center', gap:12, color:'var(--muted-foreground)' }}>
-          <div style={{ height:1, background:'var(--border)', flex:1 }} />
-          <div>Your Products</div>
-          <div style={{ height:1, background:'var(--border)', flex:1 }} />
-        </div>
-
-        <div style={{ marginTop: "1.25rem" }}>
-          {products.length === 0 ? (
-            <div style={{ textAlign:'center', color:'var(--muted-foreground)' }}>No products yet. Click &quot;Add Product&quot; to create your first item.</div>
-          ) : (
-            <div style={{ display: "grid", gap: "1rem" }}>
-              {products.map(p => {
-                const isEditing = editingId === p.id
-                return (
-                  <div key={p.id} style={{ display: "grid", gridTemplateColumns: "80px 1fr auto", gap: "1rem", alignItems: "center", border: "1px solid var(--border)", padding: "0.75rem", borderRadius: 8, background:'var(--card)' }}>
-                    <img src={(isEditing && editImageFile) ? URL.createObjectURL(editImageFile) : (isEditing ? editForm.image_url : p.image_url) || "/user-avatar.png"} alt={p.name} style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 6 }} />
-                    <div>
-                      {!isEditing ? (
-                        <>
-                          <div style={{ fontWeight: 600 }}>{p.name}</div>
-                          <div style={{ color: "var(--muted-foreground)" }}>{p.status} • Stock: {p.stock} • ₦{Number(p.price || 0).toLocaleString()}</div>
-                          {p.description ? <div style={{ marginTop: 6, color: "var(--muted-foreground)", fontSize: 14 }}>{p.description}</div> : null}
-                          {p.categories_id && categories.length>0 ? (
-                            <div style={{ marginTop: 4, fontSize: 12, color:'var(--muted-foreground)' }}>
-                              Category: {categories.find(c=>c.id===p.categories_id)?.name || p.categories_id}
+          {/* Products List */}
+          <div className={styles.productList}>
+            {products.length === 0 ? (
+              <div className={styles.emptyState}>No products yet. Click "Add Product" to create your first item.</div>
+            ) : (
+              <div className={styles.productItems}>
+                {products.map(p => {
+                  const isEditing = editingId === p.id
+                  return (
+                    <div key={p.id} className={styles.productItem}>
+                      <img
+                        src={(isEditing && editImageFile) ? URL.createObjectURL(editImageFile) : (isEditing ? editForm.image_url : p.image_url) || "/user-avatar.png"}
+                        alt={p.name}
+                        className={styles.productThumb}
+                      />
+                      <div>
+                        {!isEditing ? (
+                          <>
+                            <div style={{ fontWeight: 600 }}>{p.name}</div>
+                            <div className={styles.productMeta}>{p.status} • Stock: {p.stock} • ₦{Number(p.price || 0).toLocaleString()}</div>
+                            {p.description ? <div className={styles.productDescription}>{p.description}</div> : null}
+                            {p.categories_id && categories.length>0 ? (
+                              <div className={styles.productCategory}>
+                                Category: {categories.find(c=>c.id===p.categories_id)?.name || p.categories_id}
+                              </div>
+                            ) : null}
+                          </>
+                        ) : (
+                          <div className={styles.editGrid}>
+                            <div className={styles.editTwoCol}>
+                              <input className="input" placeholder="Name" value={editForm.name} onChange={e=>setEditForm(f=>({...f, name:e.target.value}))} />
+                              <input className="input" placeholder="Price" value={editForm.price} onChange={e=>setEditForm(f=>({...f, price:e.target.value}))} />
                             </div>
-                          ) : null}
-                        </>
-                      ) : (
-                        <div style={{ display: "grid", gap: 8 }}>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                            <input className="input" placeholder="Name" value={editForm.name} onChange={e=>setEditForm(f=>({...f, name:e.target.value}))} />
-                            <input className="input" placeholder="Price" value={editForm.price} onChange={e=>setEditForm(f=>({...f, price:e.target.value}))} />
+                            <div className={styles.editTwoCol}>
+                              <input className="input" placeholder="Stock" value={editForm.stock} onChange={e=>setEditForm(f=>({...f, stock:e.target.value}))} />
+                              <select className="input" value={editForm.categories_id} onChange={e=>setEditForm(f=>({...f, categories_id:e.target.value}))}>
+                                <option value="">Select category</option>
+                                {categories.map(c => (
+                                  <option key={c.id} value={c.id}>{c.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                            <textarea className="textarea" rows={2} placeholder="Description" value={editForm.description} onChange={e=>setEditForm(f=>({...f, description:e.target.value}))} />
+                            <div className={styles.editImageRow}>
+                              <input type="file" accept="image/*" onChange={e=>setEditImageFile(e.target.files?.[0] || null)} />
+                              {(editImageFile || editForm.image_url) && (
+                                <img src={editImageFile ? URL.createObjectURL(editImageFile) : editForm.image_url} alt="Preview" className={styles.editPreview} />
+                              )}
+                            </div>
                           </div>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                            <input className="input" placeholder="Stock" value={editForm.stock} onChange={e=>setEditForm(f=>({...f, stock:e.target.value}))} />
-                            <select className="input" value={editForm.categories_id} onChange={e=>setEditForm(f=>({...f, categories_id:e.target.value}))}>
-                              <option value="">Select category</option>
-                              {categories.map(c => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
-                              ))}
-                            </select>
-                          </div>
-                          <textarea className="textarea" rows={2} placeholder="Description" value={editForm.description} onChange={e=>setEditForm(f=>({...f, description:e.target.value}))} />
-                          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                            <input type="file" accept="image/*" onChange={e=>setEditImageFile(e.target.files?.[0] || null)} />
-                            {(editImageFile || editForm.image_url) && (
-                              <img src={editImageFile ? URL.createObjectURL(editImageFile) : editForm.image_url} alt="Preview" style={{ width: 48, height: 48, objectFit:'cover', borderRadius:6, border:'1px solid var(--border)' }} />
-                            )}
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+                      <div className={styles.productActions}>
+                        {!isEditing ? (
+                          <>
+                            <button className="btn btn-secondary" onClick={() => startEdit(p)}>Edit</button>
+                            <button className="btn btn-danger" onClick={() => deleteProduct(p.id)} disabled={submittingId===p.id}>Delete</button>
+                          </>
+                        ) : (
+                          <>
+                            <button className="btn btn-primary" onClick={() => saveEdit(p.id)} disabled={submittingId===p.id}>Save</button>
+                            <button className="btn" onClick={cancelEdit}>Cancel</button>
+                          </>
+                        )}
+                      </div>
                     </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {!isEditing ? (
-                        <>
-                          <button className="btn btn-secondary" onClick={() => startEdit(p)}>Edit</button>
-                          <button className="btn btn-danger" onClick={() => deleteProduct(p.id)} disabled={submittingId===p.id}>Delete</button>
-                        </>
-                      ) : (
-                        <>
-                          <button className="btn btn-primary" onClick={() => saveEdit(p.id)} disabled={submittingId===p.id}>Save</button>
-                          <button className="btn" onClick={cancelEdit}>Cancel</button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
+                  )
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -13,6 +13,12 @@ export default function CartPage() {
   const [isCheckingOut, setIsCheckingOut] = useState(false)
   const [user, setUser] = useState(null)
   const router = useRouter()
+  const [address, setAddress] = useState("")
+  const [city, setCity] = useState("")
+  const [stateRegion, setStateRegion] = useState("")
+  const [postalCode, setPostalCode] = useState("")
+  const [errors, setErrors] = useState({ address: "", destination: "" })
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" })
 
   // Modal state
   const [modal, setModal] = useState({ open: false, title: "", message: "", status: "" })
@@ -24,6 +30,32 @@ export default function CartPage() {
     }
     loadUser()
   }, [])
+
+  // Load default address for user from Supabase
+  useEffect(() => {
+    const loadDefaultAddress = async () => {
+      if (!user) return
+      try {
+        const { data, error } = await supabase
+          .from("addresses")
+          .select("line1, city, state, postal_code, country, is_default, created_at")
+          .eq("user_id", user.id)
+          .order("is_default", { ascending: false })
+          .order("created_at", { ascending: false })
+          .limit(1)
+        if (!error && data && data.length > 0) {
+          const a = data[0]
+          setAddress(a.line1 || "")
+          setCity(a.city || "")
+          setStateRegion(a.state || "")
+          setPostalCode(a.postal_code || "")
+        }
+      } catch (e) {
+        // no-op for UX
+      }
+    }
+    loadDefaultAddress()
+  }, [user])
 
   // Dynamically load Paystack inline script when on cart page
   useEffect(() => {
@@ -46,18 +78,53 @@ export default function CartPage() {
     }
   }
 
+  const normalizeDestination = (stateVal, cityVal) => {
+    const v = String(stateVal || cityVal || "").trim().toLowerCase()
+    if (!v) return ""
+    if (v.includes("international")) return "international"
+    if (v.includes("lagos")) return "lagos"
+    if (v.includes("abuja")) return "abuja"
+    if (v.includes("nationwide")) return "nationwide"
+    return "nationwide" // default for other Nigerian cities/states
+  }
+
+  const getShippingFee = (dest, postal) => {
+    const base = { lagos: 1500, abuja: 2000, nationwide: 2500, international: 15000 }
+    let fee = base[dest] || 0
+    const p = (postal || "").trim()
+    // Simple heuristic for smarter fees
+    if (dest === "lagos" && /^10/.test(p)) fee = 1200
+    if (dest === "abuja" && /^90/.test(p)) fee = 1800
+    return fee
+  }
+
+  const validate = () => {
+    const errs = { address: "", destination: "" }
+    if (!address || address.trim().length < 8) errs.address = "Please enter a valid delivery address (min 8 characters)."
+    if (!stateRegion) errs.destination = "Please select or enter a state/region."
+    setErrors(errs)
+    return !errs.address && !errs.destination
+  }
+
   const openModal = (title, message, status) => {
     setModal({ open: true, title, message, status })
   }
   const closeModal = () => setModal(m => ({ ...m, open: false }))
 
-  const verifyAndSaveOrder = async (reference, userId) => {
+  const verifyAndSaveOrder = async ({ reference, userId, address, destination, postalCode, normalizedDestination, shippingFee, subtotal, total }) => {
     try {
-      const total = Number(getCartTotal() || 0)
       const payload = {
         reference,
+        subtotal,
+        shipping_fee: shippingFee,
         total,
+        address,
+        destination,
+        normalized_destination: normalizedDestination,
+        postal_code: postalCode,
         items,
+        city: city || null,
+        stateRegion: stateRegion || null,
         user_id: userId,
       }
       const res = await fetch("/api/paystack/verify", {
@@ -87,9 +154,13 @@ export default function CartPage() {
       router.push("/login?redirect=/cart")
       return
     }
+    if (!validate()) return
     setIsCheckingOut(true)
     try {
-      const total = Number(getCartTotal() || 0)
+      const subtotal = Number(getCartTotal() || 0)
+      const normalized = normalizeDestination(stateRegion, city)
+      const shippingFee = getShippingFee(normalized, postalCode)
+      const total = subtotal + shippingFee
       if (!total || total <= 0) {
         openModal("Cart Empty", "Your cart total must be greater than 0.", "error")
         return
@@ -116,10 +187,42 @@ export default function CartPage() {
           // response.reference is provided by Paystack
           (async () => {
             try {
-              const result = await verifyAndSaveOrder(response?.reference || reference, current.id)
+              const result = await verifyAndSaveOrder({
+                reference: response?.reference || reference,
+                userId: current.id,
+                address,
+                city,
+                stateRegion,
+                postalCode,
+                normalizedDestination: normalized,
+                shippingFee,
+                subtotal,
+                total,
+              })
               const status = result?.status || "pending"
               if (status === "paid") {
-                openModal("Payment Successful", "Your order has been placed successfully.", "success")
+                setToast({ show: true, type: "success", message: "Order placed successfully!" })
+                openModal(
+                  "Payment Successful",
+                  `Your order has been placed successfully.\n\nShipping to: ${address}\nCity/State: ${city || "-"} / ${stateRegion}${postalCode ? ` (${postalCode})` : ""}`,
+                  "success"
+                )
+                // Save as default address on server
+                try {
+                  await supabase.from("addresses").update({ is_default: false }).eq("user_id", current.id)
+                  await supabase.from("addresses").insert({
+                    user_id: current.id,
+                    line1: address,
+                    line2: null,
+                    city: city || null,
+                    state: stateRegion || null,
+                    postal_code: postalCode || null,
+                    country: normalizeDestination(stateRegion, city) === "international" ? "INTL" : "NG",
+                    is_default: true,
+                  })
+                } catch (e) {
+                  // Ignore save errors to not block UX
+                }
                 clearCart()
               } else if (status === "pending") {
                 openModal("Payment Pending", "We couldn\'t confirm payment yet. Please check your orders later.", "warning")
@@ -159,6 +262,11 @@ export default function CartPage() {
   return (
     <div className="container">
       {isCheckingOut && <FullPageLoader message="Placing your order..." />}
+      {toast.show && (
+        <div style={{ position: "fixed", right: 16, bottom: 16, background: "#065f46", color: "white", padding: "12px 16px", borderRadius: 8, zIndex: 1100 }}>
+          {toast.message}
+        </div>
+      )}
       {/* Modal */}
       {modal.open && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
@@ -222,6 +330,53 @@ export default function CartPage() {
           <div className={styles.cartSummary}>
             <h2>Order Summary</h2>
 
+            <div className={styles.addressBlock}>
+              <label htmlFor="shippingAddress">Shipping Address</label>
+              <textarea
+                id="shippingAddress"
+                className="textarea"
+                placeholder="Enter your delivery address"
+                rows={3}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              {errors.address ? <div className={styles.formError}>{errors.address}</div> : null}
+              <div className={styles.destinationRow}>
+                <label htmlFor="city">City (optional)</label>
+                <input id="city" list="city-list" className="input" value={city} onChange={(e)=> setCity(e.target.value)} placeholder="e.g. Ikeja" />
+                <datalist id="city-list">
+                  <option value="Ikeja" />
+                  <option value="Lekki" />
+                  <option value="Victoria Island" />
+                  <option value="Wuse" />
+                  <option value="Garki" />
+                  <option value="Port Harcourt" />
+                </datalist>
+              </div>
+              <div className={styles.destinationRow}>
+                <label htmlFor="state">State/Region</label>
+                <input id="state" list="state-list" className="input" value={stateRegion} onChange={(e)=> setStateRegion(e.target.value)} placeholder="e.g. Lagos, Abuja, Nationwide, International" />
+                <datalist id="state-list">
+                  <option value="Lagos" />
+                  <option value="Abuja" />
+                  <option value="Ogun" />
+                  <option value="Oyo" />
+                  <option value="Rivers" />
+                  <option value="Kano" />
+                  <option value="Kaduna" />
+                  <option value="Enugu" />
+                  <option value="Nationwide" />
+                  <option value="International" />
+                </datalist>
+              </div>
+              {errors.destination ? <div className={styles.formError}>{errors.destination}</div> : null}
+              <div className={styles.destinationRow}>
+                <label htmlFor="postal">Postal Code (optional)</label>
+                <input id="postal" className="input" placeholder="e.g. 100001" value={postalCode} onChange={(e)=> setPostalCode(e.target.value)} />
+              </div>
+              <p className={styles.addressHint}>We will ship to this address. Shipping fee depends on destination.</p>
+            </div>
+
             <div className={styles.summaryRow}>
               <span>Subtotal:</span>
               <span>₦{Number(getCartTotal() || 0).toLocaleString()}</span>
@@ -229,7 +384,7 @@ export default function CartPage() {
 
             <div className={styles.summaryRow}>
               <span>Shipping:</span>
-              <span>₦0</span>
+              <span>₦{(() => { const fee = getShippingFee(normalizeDestination(stateRegion, city), postalCode); return Number(fee || 0).toLocaleString() })()}</span>
             </div>
 
             <div className={styles.summaryRow}>
@@ -239,12 +394,12 @@ export default function CartPage() {
 
             <div className={`${styles.summaryRow} ${styles.total}`}>
               <span>Total:</span>
-              <span>₦{Number(getCartTotal() || 0).toLocaleString()}</span>
+              <span>₦{(() => { const subtotal = Number(getCartTotal() || 0); const fee = getShippingFee(normalizeDestination(stateRegion, city), postalCode); return Number(subtotal + fee).toLocaleString() })()}</span>
             </div>
 
             <button
               onClick={handleCheckout}
-              disabled={isCheckingOut}
+              disabled={isCheckingOut || !address || !stateRegion}
               className={`btn btn-primary ${styles.checkoutBtn}`}
             >
               {isCheckingOut ? "Processing..." : "Proceed to Checkout"}

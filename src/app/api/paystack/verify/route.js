@@ -25,7 +25,22 @@ import { createClient } from "@supabase/supabase-js"
 export async function POST(req) {
   try {
     const body = await req.json()
-    const { reference, total, items, user_id } = body || {}
+    const {
+      reference,
+      total,
+      items,
+      user_id,
+      address,
+      destination,
+      normalized_destination,
+      postal_code,
+      shipping_fee,
+      subtotal,
+      city,
+      stateRegion,
+      shippingCity,
+      shippingState,
+    } = body || {}
     if (!reference) return NextResponse.json({ error: "Missing reference" }, { status: 400 })
     if (!user_id) return NextResponse.json({ error: "Missing user_id" }, { status: 400 })
 
@@ -59,13 +74,36 @@ export async function POST(req) {
       productsJson = null
     }
 
-    // Attempt to insert with optional products column; fall back if it doesn't exist
+    // Prepare shipping details (will try to insert as columns/JSON if available)
+    const shipping = {
+      address: address || null,
+      city: shippingCity || city || null,
+      state: shippingState || stateRegion || destination || null,
+      postal_code: postal_code || null,
+      normalized_destination: normalized_destination || null,
+      shipping_fee: Number(shipping_fee || 0),
+      subtotal: Number(subtotal || 0),
+      total: totalAmount,
+    }
+
+    // Attempt to insert with shipping JSON column if exists; fall back if it doesn't exist
     let insertError = null
     let orderRow = null
     try {
       const { data: inserted, error } = await supabase
         .from("orders")
-        .insert({ user_id, status: orderStatus, total_amount: totalAmount, products: productsJson })
+        .insert({
+          user_id,
+          status: orderStatus,
+          total_amount: totalAmount,
+          products: productsJson,
+          shipping, // if a jsonb column named 'shipping' exists this will work
+          shipping_address: address || null,
+          shipping_city: shipping.city || null,
+          shipping_state: shipping.state || null,
+          shipping_postal_code: shipping.postal_code || null,
+          shipping_fee: shipping.shipping_fee || null,
+        })
         .select("*")
         .maybeSingle()
       insertError = error
@@ -75,10 +113,17 @@ export async function POST(req) {
     }
 
     if (insertError) {
+      // Retry without shipping-specific columns; embed shipping into products JSON to avoid data loss
+      let productsWithShipping = null
+      try {
+        productsWithShipping = JSON.stringify({ items: items || [], shipping })
+      } catch (_) {
+        productsWithShipping = productsJson
+      }
       // Retry without products column
       const { data: inserted2, error: err2 } = await supabase
         .from("orders")
-        .insert({ user_id, status: orderStatus, total_amount: totalAmount })
+        .insert({ user_id, status: orderStatus, total_amount: totalAmount, products: productsWithShipping })
         .select("*")
         .maybeSingle()
       if (err2) {
