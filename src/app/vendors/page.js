@@ -264,7 +264,7 @@ export default function VendorDashboardPage() {
           {/* Products List */}
           <div className={styles.productList}>
             {products.length === 0 ? (
-              <div className={styles.emptyState}>No products yet. Click "Add Product" to create your first item.</div>
+              <div className={styles.emptyState}>No products yet. Click &quot;Add Product&quot; to create your first item.</div>
             ) : (
               <div className={styles.productItems}>
                 {products.map(p => {

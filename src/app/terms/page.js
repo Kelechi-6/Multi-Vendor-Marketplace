@@ -11,7 +11,7 @@ export default function TermsPage() {
         <div className={styles.container}>
           <h1 className={styles.title}>Terms of Service</h1>
           <div className={styles.card}>
-            <p>These Terms of Service ("Terms") govern your use of Keecee Collection. By accessing or using our services, you agree to these Terms.</p>
+            <p>These Terms of Service (&quot;Terms&quot;) govern your use of Keecee Collection. By accessing or using our services, you agree to these Terms.</p>
             <h2>1. Accounts</h2>
             <p>Users are responsible for maintaining the security of their account and password.</p>
             <h2>2. Orders & Payments</h2>
