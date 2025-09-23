@@ -204,10 +204,17 @@ export default function ProfilePage() {
                 ) : (
                   <div className={styles.ordersList}>
                     {orders.map((o) => {
-                      let parsed = []
+                      let parsedRaw = []
                       try {
-                        parsed = typeof o.products === 'string' ? JSON.parse(o.products) : (o.products || [])
-                      } catch (_e) { parsed = [] }
+                        parsedRaw = typeof o.products === 'string' ? JSON.parse(o.products) : (o.products ?? [])
+                      } catch (_e) { parsedRaw = [] }
+                      const parsed = Array.isArray(parsedRaw)
+                        ? parsedRaw
+                        : (parsedRaw && Array.isArray(parsedRaw.items))
+                          ? parsedRaw.items
+                          : (parsedRaw && typeof parsedRaw === 'object')
+                            ? [parsedRaw]
+                            : []
                       return (
                         <div key={o.id} className={styles.orderCard}>
                           <div className={styles.orderHeader}>

@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import styles from "./AdminSidebar.module.css"
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ open = true, onClose }) {
   const [activeItem, setActiveItem] = useState("dashboard")
   const router = useRouter()
 
@@ -25,11 +25,16 @@ export default function AdminSidebar() {
   ]
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className={`${styles.sidebar} ${open ? styles.open : ""}`}>
       <div className={styles.sidebarHeader}>
         <Link href="/admin/dashboard" className={styles.logo}>
           <h2>Keecee Admin</h2>
         </Link>
+        {onClose && (
+          <button className={styles.closeBtn} aria-label="Close menu" onClick={onClose}>
+            ✕
+          </button>
+        )}
       </div>
 
       <nav className={styles.sidebarNav}>

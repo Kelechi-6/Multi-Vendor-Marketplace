@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useCart } from "../contexts/CartContext"
 import supabase from "../lib/supabaseClient"
 import styles from "./Header.module.css"
@@ -15,6 +16,8 @@ export default function Header() {
   const [theme, setTheme] = useState("light")
   const { getCartItemsCount } = useCart()
   const cartCount = getCartItemsCount()
+  const pathname = usePathname()
+  const isAdminRoute = pathname?.startsWith('/admin')
 
   // ✅ Load session & subscribe to auth changes
   useEffect(() => {
@@ -116,7 +119,7 @@ export default function Header() {
     profile?.username || user?.user_metadata?.username || user?.user_metadata?.full_name || profile?.email || user?.email || "Guest"
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isAdminRoute ? styles.admin : ''}`}>
       <div className="container">
         <div className={styles.headerContent}>
           {/* Logo */}

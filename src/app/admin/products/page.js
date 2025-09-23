@@ -12,6 +12,7 @@ import { uploadImageToItemsBucket } from "../../../../lib/uploadImage"
 export default function AdminProductsPage() {
   const router = useRouter()
   const [admin, setAdmin] = useState(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [pending, setPending] = useState([])
   const [active, setActive] = useState([])
   const [loading, setLoading] = useState(true)
@@ -187,8 +188,22 @@ export default function AdminProductsPage() {
     <>
       <Header />
       <div className={ui.adminLayout}>
-        <AdminSidebar />
+        <AdminSidebar open={isSidebarOpen || typeof window === 'undefined'} onClose={() => setIsSidebarOpen(false)} />
+        {/* Mobile overlay for sidebar */}
+        <div
+          className={`${ui.overlay} ${isSidebarOpen ? 'show' : ''}`}
+          onClick={() => setIsSidebarOpen(false)}
+        />
         <main className={ui.main}>
+        {/* Mobile menu toggle */}
+        <button
+          type="button"
+          className={ui.mobileToggle}
+          aria-label="Open admin menu"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          ☰ Menu
+        </button>
         <div className={ui.pageHeader}>
           <h1 className={ui.pageTitle}>Products</h1>
           <div className={ui.toolbar}>

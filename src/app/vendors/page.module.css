@@ -150,7 +150,7 @@
   }
   .profileActions {
     grid-column: 1 / -1;
-    justify-self: end;
+    /* justify-self: end; */
   }
   .profileTwoCol {
     grid-template-columns: 1fr;

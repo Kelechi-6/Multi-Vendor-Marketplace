@@ -10,6 +10,9 @@
   margin-left: 280px;
 }
 
+/* Overlay for mobile sidebar (hidden on desktop) */
+.overlay { display: none; }
+
 .dashboardHeader {
   margin-bottom: 2rem;
 }
@@ -181,6 +184,30 @@
   .mainContent {
     margin-left: 0;
     padding: 1rem;
+  }
+
+  /* Mobile overlay behind the slide-in sidebar */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+    display: none;
+  }
+
+  .overlay.show { display: block; }
+
+  /* Mobile toggle button */
+  .mobileToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--foreground);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
   }
 
   .statsGrid {

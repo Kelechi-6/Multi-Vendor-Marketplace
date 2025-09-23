@@ -10,6 +10,9 @@
   margin-left: 280px; /* width of fixed AdminSidebar */
 }
 
+/* Overlay for mobile sidebar (hidden on desktop) */
+.overlay { display: none; }
+
 .pageHeader {
   display: flex;
   align-items: center;
@@ -142,5 +145,27 @@
 
 @media (max-width: 768px) {
   .main { margin-left: 0; padding: 16px; }
+  /* Mobile overlay behind the slide-in sidebar */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+    display: none;
+  }
+  .overlay.show { display: block; }
+
+  /* Mobile toggle button */
+  .mobileToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--foreground);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
   .formGrid { grid-template-columns: 1fr; }
 }

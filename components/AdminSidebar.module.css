@@ -1,14 +1,22 @@
 .sidebar {
   width: 280px;
-  height: calc(100vh - var(--header-height, 64px));
+  /* height: calc(100vh - var(--header-height, 64px)); */
   background-color: var(--card);
   border-right: 1px solid var(--border);
   position: fixed;
   left: 0;
-  top: var(--header-height, 64px);
+  /* top: var(--header-height, 64px); */
   display: flex;
   flex-direction: column;
   z-index: 50;
+}
+
+/* Exported utility classes for CSS Modules */
+.open { /* non-empty to satisfy linter; used as a state token */
+  --state-open: 1;
+}
+.show { /* non-empty to satisfy linter; used as a state token */
+  --state-show: 1;
 }
 
 .sidebarHeader {
@@ -84,6 +92,16 @@
   color: var(--destructive);
 }
 
+/* Mobile overlay, shown when sidebar is open */
+.overlay {
+  display: none;
+}
+
+/* Close button visible on mobile inside the sidebar */
+.closeBtn {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -92,5 +110,38 @@
 
   .sidebar.open {
     transform: translateX(0);
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+    display: none;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .closeBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    font-size: 1.25rem;
+    border-radius: 6px;
+  }
+
+  .closeBtn:hover {
+    background: var(--muted);
+    color: var(--foreground);
   }
 }

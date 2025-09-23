@@ -10,6 +10,7 @@ import FullPageLoader from "../../../../components/FullPageLoader"
 
 export default function AdminDashboard() {
   const [admin, setAdmin] = useState(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalVendors: 0,
@@ -126,9 +127,24 @@ export default function AdminDashboard() {
     <>
       <Header />
       <div className={styles.adminLayout}>
-        <AdminSidebar />
+        <AdminSidebar open={isSidebarOpen || typeof window === 'undefined'} onClose={() => setIsSidebarOpen(false)} />
+
+        {/* Mobile overlay for sidebar */}
+        <div
+          className={`${styles.overlay} ${isSidebarOpen ? styles.show : ""}`}
+          onClick={() => setIsSidebarOpen(false)}
+        />
 
         <main className={styles.mainContent}>
+        {/* Mobile menu toggle */}
+        <button
+          type="button"
+          className={styles.mobileToggle}
+          aria-label="Open admin menu"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          ☰ Menu
+        </button>
         {statsLoading && <FullPageLoader message="Loading dashboard..." />}
         <div className={styles.dashboardHeader}>
           <h1>Admin Dashboard</h1>

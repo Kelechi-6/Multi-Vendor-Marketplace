@@ -7,6 +7,11 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+/* Marker class applied to header on admin routes */
+.admin {
+  --route-admin: 1; /* non-empty to satisfy linter */
+}
+
 .headerContent {
   display: flex;
   align-items: center;
@@ -160,7 +165,7 @@
   justify-content: center;
 }
 
-.mobileMenuButton {
+.header .mobileMenuButton {
   display: none;
   background: none;
   border: none;
@@ -246,7 +251,7 @@
     display: none;
   }
 
-  .mobileMenuButton {
+  .header .mobileMenuButton {
     display: block;
   }
 
@@ -256,6 +261,11 @@
 
   .searchContainer {
     max-width: 200px;
+  }
+
+  /* Hide search only on admin pages to avoid overlap */
+  .header.admin .searchContainer {
+    display: none;
   }
 
   .userMenu {

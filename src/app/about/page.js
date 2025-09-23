@@ -26,8 +26,8 @@ export default function AboutPage() {
               <h2>Contact</h2>
               <p>Have questions or need support? Reach out:</p>
               <ul>
-                <li>Email: support@keecee-collection.com</li>
-                <li>Phone: +234 800 000 0000</li>
+                <li>Email: kcboytimo@gmail.com</li>
+                <li>Phone: +234 803 328 2350</li>
               </ul>
             </div>
             <div className={styles.section}>
