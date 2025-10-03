@@ -19,6 +19,7 @@
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .pageTitle {
@@ -31,7 +32,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
+
+.mobileToggle { display: none; }
 
 .input {
   padding: 10px 12px;
@@ -72,11 +76,13 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 720px; /* keep columns readable on small screens; scrolls within wrapper */
 }
 
 .th, .td {
@@ -113,9 +119,15 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px;
-  display: flex;
+  /* display: flex; */
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+}
+
+/* Utility: stack card content vertically */
+.cardColumn {
+  display: flex;
+  flex-direction: column;
 }
 
 .badge {
@@ -145,6 +157,9 @@
 
 @media (max-width: 768px) {
   .main { margin-left: 0; padding: 16px; }
+  .pageHeader { flex-direction: column; align-items: stretch; gap: 8px; }
+  .toolbar { width: 100%; }
+  .input { width: 100%; }
   /* Mobile overlay behind the slide-in sidebar */
   .overlay {
     position: fixed;
@@ -154,7 +169,7 @@
     display: none;
   }
   .overlay.show { display: block; }
-
+  
   /* Mobile toggle button */
   .mobileToggle {
     display: inline-flex;
@@ -168,4 +183,34 @@
     margin-bottom: 12px;
   }
   .formGrid { grid-template-columns: 1fr; }
+
+  /* Stack tables as cards to avoid horizontal scroll */
+  .table { min-width: 0; border: 0; }
+  .table thead { display: none; }
+  .table tbody tr {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .table tbody tr:last-child { margin-bottom: 0; }
+  .td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .td:first-child { border-top: none; }
+  .td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+}
+
+@media (max-width: 480px) {
+  .btnSm { width: 100%; justify-content: center; }
 }

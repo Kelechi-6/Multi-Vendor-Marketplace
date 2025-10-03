@@ -98,12 +98,12 @@ export default function AdminVendorsPage() {
               <tbody>
                 {filtered.map(v => (
                   <tr key={v.id}>
-                    <td className={ui.td}>{v.id.slice(0,8)}</td>
-                    <td className={ui.td}>{v.shop_name}</td>
-                    <td className={ui.td}>{v.display_name || '-'}</td>
-                    <td className={ui.td}>{v.user_id?.slice(0,8)}</td>
-                    <td className={ui.td}>{new Date(v.created_at).toLocaleString()}</td>
-                    <td className={ui.td}>
+                    <td className={ui.td} data-label="ID">{v.id.slice(0,8)}</td>
+                    <td className={ui.td} data-label="Shop">{v.shop_name}</td>
+                    <td className={ui.td} data-label="Display Name">{v.display_name || '-'}</td>
+                    <td className={ui.td} data-label="User">{v.user_id?.slice(0,8)}</td>
+                    <td className={ui.td} data-label="Created">{new Date(v.created_at).toLocaleString()}</td>
+                    <td className={ui.td} data-label="Actions">
                       <a className="btn btn-secondary" href={`/admin/vendors/${v.id}`}>View Store</a>
                     </td>
                   </tr>

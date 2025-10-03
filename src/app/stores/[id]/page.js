@@ -63,7 +63,7 @@ export default function PublicStorePage({ params }) {
       ) : error ? (
         <div className="container" style={{ padding: "2rem", color: "#b00020" }}>{error}</div>
       ) : vendor ? (
-        <div className="container" style={{ padding: "1.5rem 0" }}>
+        <div className="container" style={{ padding: "25px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
             <div>
               <h1 style={{ margin: 0 }}>{vendor.display_name || vendor.shop_name}</h1>

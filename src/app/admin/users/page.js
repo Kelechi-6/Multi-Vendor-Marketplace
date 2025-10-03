@@ -110,12 +110,12 @@ export default function AdminUsersPage() {
               <tbody>
                 {filtered.map(u => (
                   <tr key={u.id}>
-                    <td className={ui.td}>{u.id.slice(0,8)}</td>
-                    <td className={ui.td}>{u.email}</td>
-                    <td className={ui.td}>{u.username || "-"}</td>
-                    <td className={ui.td}>{u.is_vendor ? "Yes" : "No"}</td>
-                    <td className={ui.td}>{u.super_user ? "Yes" : "No"}</td>
-                    <td className={ui.td}>{new Date(u.created_at).toLocaleString()}</td>
+                    <td className={ui.td} data-label="ID">{u.id.slice(0,8)}</td>
+                    <td className={ui.td} data-label="Email">{u.email}</td>
+                    <td className={ui.td} data-label="Username">{u.username || "-"}</td>
+                    <td className={ui.td} data-label="Vendor">{u.is_vendor ? "Yes" : "No"}</td>
+                    <td className={ui.td} data-label="Admin">{u.super_user ? "Yes" : "No"}</td>
+                    <td className={ui.td} data-label="Created">{new Date(u.created_at).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

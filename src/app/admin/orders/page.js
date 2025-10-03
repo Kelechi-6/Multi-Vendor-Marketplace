@@ -15,6 +15,7 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [q, setQ] = useState("")
 
   useEffect(() => {
     const init = async () => {
@@ -32,7 +33,7 @@ export default function AdminOrdersPage() {
         setLoading(true); setError("")
         const { data, error } = await supabase
           .from("orders")
-          .select("id, created_at, status, total_amount, user_id")
+          .select("id, created_at, status, total_amount, user_id, users:user_id(username, email)")
           .order("created_at", { ascending: false })
           .limit(500)
         if (error) throw error
@@ -49,6 +50,15 @@ export default function AdminOrdersPage() {
   }
 
   if (!admin) return <FullPageLoader message="Verifying admin..." />
+
+  const filteredOrders = orders.filter(o => {
+    const userText = `${o.users?.username || ""} ${o.users?.email || ""}`.toLowerCase()
+    const idText = `${o.id}`.toLowerCase()
+    const statusText = `${o.status || ""}`.toLowerCase()
+    const amountText = `${o.total_amount || 0}`
+    const qv = q.toLowerCase().trim()
+    return qv === "" || userText.includes(qv) || idText.includes(qv) || statusText.includes(qv) || amountText.includes(qv)
+  })
 
   return (
     <>
@@ -72,6 +82,14 @@ export default function AdminOrdersPage() {
         </button>
         <div className={ui.pageHeader}>
           <h1 className={ui.pageTitle}>Orders</h1>
+          <div className={ui.toolbar}>
+            <input
+              className={ui.input}
+              value={q}
+              onChange={(e)=>setQ(e.target.value)}
+              placeholder="Search orders by id, user, status"
+            />
+          </div>
         </div>
         {loading && <FullPageLoader message="Loading orders..." />}
         {error && <div className={ui.notice}>{error}</div>}
@@ -88,12 +106,12 @@ export default function AdminOrdersPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map(o => (
+                {filteredOrders.map(o => (
                   <tr key={o.id}>
-                    <td className={ui.td}>{o.id.slice(0,8)}</td>
-                    <td className={ui.td}>{o.user_id?.slice(0,8)}</td>
-                    <td className={ui.td}>${Number(o.total_amount||0).toLocaleString()}</td>
-                    <td className={ui.td}>
+                    <td className={ui.td} data-label="ID">{o.id.slice(0,8)}</td>
+                    <td className={ui.td} data-label="Customer">{o.users?.username || o.users?.email || o.user_id?.slice(0,8) || 'Unknown'}</td>
+                    <td className={ui.td} data-label="Amount">${Number(o.total_amount||0).toLocaleString()}</td>
+                    <td className={ui.td} data-label="Status">
                       <select value={o.status||''} onChange={(e)=>updateStatus(o.id, e.target.value)}>
                         <option value="pending">pending</option>
                         <option value="processing">processing</option>
@@ -102,7 +120,7 @@ export default function AdminOrdersPage() {
                         <option value="cancelled">cancelled</option>
                       </select>
                     </td>
-                    <td className={ui.td}>{new Date(o.created_at).toLocaleString()}</td>
+                    <td className={ui.td} data-label="Created">{new Date(o.created_at).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

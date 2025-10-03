@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import Header from "../../../components/Header"
 import ProductCard from "../../../components/ProductCard"
 import styles from "./page.module.css"
@@ -8,6 +9,8 @@ import supabase from "../../../lib/supabaseClient"
 import FullPageLoader from "../../../components/FullPageLoader"
 
 export default function ProductsPage() {
+  const params = useSearchParams()
+  const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [sortBy, setSortBy] = useState("name")
@@ -55,6 +58,14 @@ export default function ProductsPage() {
     }
     load()
   }, [])
+
+  // Sync searchTerm with ?q= param
+  useEffect(() => {
+    const q = params.get('q') || ""
+    setSearchTerm(q)
+    // reset to first page when search term via URL changes
+    setCurrentPage(1)
+  }, [params])
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {

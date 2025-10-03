@@ -263,8 +263,8 @@
     max-width: 200px;
   }
 
-  /* Hide search only on admin pages to avoid overlap */
-  .header.admin .searchContainer {
+  /* Hide search on all pages on mobile to save space */
+  .searchContainer {
     display: none;
   }
 

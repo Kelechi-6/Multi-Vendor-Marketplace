@@ -64,11 +64,11 @@ export default function OrderDetailsPage({ params }) {
         <div className="container" style={{ padding: 24, color: "#b00020" }}>{error}</div>
       ) : order ? (
         <div className="container" style={{ padding: "1.5rem 0" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px", padding: "0 1rem" }}>
             <h1 style={{ margin: 0 }}>Order #{order.id?.slice(0,8)}</h1>
             <Link href="/profile?tab=orders" className="btn btn-secondary">Back to Orders</Link>
           </div>
-          <div style={{ color: "var(--muted-foreground)", marginBottom: 12 }}>
+          <div style={{ color: "var(--muted-foreground)", marginBottom: "12px", padding: "0 1rem" }}>
             Placed on {new Date(order.created_at).toLocaleString()}
           </div>
           <div style={{ display: "grid", gap: 12 }}>

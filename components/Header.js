@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCart } from "../contexts/CartContext"
 import supabase from "../lib/supabaseClient"
 import styles from "./Header.module.css"
@@ -179,14 +179,40 @@ export default function Header() {
 }
 
 function SearchBar() {
+  const router = useRouter()
+  const params = useSearchParams()
+  const [q, setQ] = useState(params.get('q') || '')
+
+  useEffect(() => {
+    // Sync with URL when it changes
+    const next = params.get('q') || ''
+    setQ(next)
+  }, [params])
+
+  const goSearch = () => {
+    const term = (q || '').trim()
+    if (term.length > 0) router.push(`/products?q=${encodeURIComponent(term)}`)
+    else router.push('/products')
+  }
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      goSearch()
+    }
+  }
+
   return (
     <div className={styles.searchContainer}>
       <input
         type="text"
         placeholder="Search products, vendors..."
         className={styles.searchInput}
+        value={q}
+        onChange={(e)=>setQ(e.target.value)}
+        onKeyDown={onKeyDown}
       />
-      <button className={styles.searchButton}>
+      <button className={styles.searchButton} onClick={goSearch} aria-label="Search">
         <SearchIcon />
       </button>
     </div>
@@ -257,9 +283,6 @@ function MobileMenu({ user, onLogout, displayName, hasVendor, hasAdmin }) {
     <div className={styles.mobileMenu}>
       <Link href="/products" className={styles.mobileNavLink}>
         Products
-      </Link>
-      <Link href="/vendors" className={styles.mobileNavLink}>
-        Vendors
       </Link>
       {user ? (
         <>

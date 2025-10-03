@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Header from "../../../components/Header"
 import supabase from "../../../lib/supabaseClient"
+import styles from "./page.module.css"
 
 export default function VendorsDirectoryPage() {
   const [vendors, setVendors] = useState([])
@@ -35,40 +36,40 @@ export default function VendorsDirectoryPage() {
   })
 
   return (
-    <div>
+    <div className={styles.page}>
       <Header />
-      <div className="container" style={{ padding: "1.5rem 0" }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <h1 style={{ margin: 0 }}>Vendors</h1>
+      <div className={`container ${styles.container}`}>
+        <div className={styles.headerRow}>
+          <h1 className={styles.title}>Vendors</h1>
           <input
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder="Search vendors..."
-            style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e7eb', minWidth: 240 }}
+            className={styles.searchInput}
           />
         </div>
 
         {loading ? (
-          <div style={{ padding: '2rem 0' }}>Loading vendors...</div>
+          <div className={styles.loading}>Loading vendors...</div>
         ) : error ? (
-          <div style={{ padding: '2rem 0', color: '#b00020' }}>{error}</div>
+          <div className={styles.error}>{error}</div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: '2rem 0' }}>
+          <div className={styles.empty}>
             <h3>No vendors found</h3>
             <p>Try a different search term.</p>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16, marginTop: 16 }}>
+          <div className={styles.cardsGrid}>
             {filtered.map(v => (
-              <div key={v.id} style={{ border: '1px solid #e5e7eb', borderRadius: 10, padding: 16, background: '#fff' }}>
-                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                  <img src="/user-avatar.png" alt={v.shop_name || v.display_name || 'Vendor'} style={{ width: 56, height: 56, borderRadius: 8, objectFit: 'cover' }} />
+              <div key={v.id} className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <img src="/user-avatar.png" alt={v.shop_name || v.display_name || 'Vendor'} className={styles.cardThumb} />
                   <div>
-                    <h3 style={{ margin: '0 0 2px 0' }}>{v.display_name || v.shop_name}</h3>
-                    {v.business_type && <div style={{ color: '#6b7280', fontSize: 14 }}>{v.business_type}</div>}
+                    <h3 className={styles.cardTitle}>{v.display_name || v.shop_name}</h3>
+                    {v.business_type && <div className={styles.cardMeta}>{v.business_type}</div>}
                   </div>
                 </div>
-                {v.bio && <p style={{ margin: '10px 0 12px 0', color: '#4b5563' }}>{v.bio}</p>}
+                {v.bio && <p style={{ margin: '10px 0 12px 0', color: 'var(--muted-foreground)' }}>{v.bio}</p>}
                 <a href={`/stores/${v.id}`} className="btn btn-primary">View Store</a>
               </div>
             ))}

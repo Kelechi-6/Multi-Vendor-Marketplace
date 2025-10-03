@@ -20,6 +20,7 @@ export default function AdminProductsPage() {
   const [tab, setTab] = useState("pending")
   const [msg, setMsg] = useState("")
   const [vendors, setVendors] = useState([])
+  const [q, setQ] = useState("")
   const [form, setForm] = useState({
     id: null,
     name: "",
@@ -207,6 +208,12 @@ export default function AdminProductsPage() {
         <div className={ui.pageHeader}>
           <h1 className={ui.pageTitle}>Products</h1>
           <div className={ui.toolbar}>
+            <input
+              className={ui.input}
+              value={q}
+              onChange={(e)=>setQ(e.target.value)}
+              placeholder="Search by name, vendor, id, status"
+            />
             <button className={`${ui.btnSm} ${tab==='pending'?ui.btnPrimary:''}`} onClick={()=>setTab('pending')}>Pending</button>
             <button className={`${ui.btnSm} ${tab==='active'?ui.btnPrimary:''}`} onClick={()=>setTab('active')}>Active</button>
           </div>
@@ -217,7 +224,7 @@ export default function AdminProductsPage() {
 
         {/* Product form */}
         {!loading && (
-          <div className={ui.card} style={{ marginBottom: 16 }}>
+          <div className={`${ui.card} ${ui.cardColumn}`} style={{ marginBottom: 16 }}>
             <div style={{ fontWeight:600, marginBottom: 8 }}>{form.id ? 'Edit product' : 'New product'}</div>
             <form onSubmit={handleSubmit} className={ui.formGrid}>
               <div className={ui.formControl}>
@@ -277,21 +284,30 @@ export default function AdminProductsPage() {
 
         {!loading && tab === 'pending' && (
           <div className={ui.cardList}>
-            {pending.length === 0 ? <div className={ui.empty}>No pending products</div> : pending.map(p => (
-              <div key={p.id} className={ui.card}>
-                <div>
-                  <div style={{ fontWeight:600 }}>{p.name}</div>
-                  <div>${Number(p.price||0).toLocaleString()}</div>
-                  <div>Vendor: {p.vendors?.shop_name || 'Unknown'}</div>
+            {(() => {
+              const qv = q.toLowerCase().trim()
+              const list = pending.filter(p => {
+                const vendorName = p.vendors?.shop_name || ""
+                const text = `${p.name || ''} ${vendorName} ${p.id} ${p.status || ''}`.toLowerCase()
+                return qv === '' || text.includes(qv)
+              })
+              if (list.length === 0) return <div className={ui.empty}>No pending products</div>
+              return list.map(p => (
+                <div key={p.id} className={ui.card}>
+                  <div>
+                    <div style={{ fontWeight:600 }}>{p.name}</div>
+                    <div>${Number(p.price||0).toLocaleString()}</div>
+                    <div>Vendor: {p.vendors?.shop_name || 'Unknown'}</div>
+                  </div>
+                  <div className={ui.actions}>
+                    <button className={`${ui.btnSm} ${ui.btnPrimary}`} onClick={()=>updateProduct(p.id,'active')}>Approve</button>
+                    <button className={`${ui.btnSm}`} onClick={()=>handleEdit(p)}>Edit</button>
+                    <button className={`${ui.btnSm} ${ui.btnDanger}`} onClick={()=>updateProduct(p.id,'rejected')}>Reject</button>
+                    <button className={`${ui.btnSm} ${ui.btnDanger}`} onClick={()=>handleDelete(p.id)}>Delete</button>
+                  </div>
                 </div>
-                <div className={ui.actions}>
-                  <button className={`${ui.btnSm} ${ui.btnPrimary}`} onClick={()=>updateProduct(p.id,'active')}>Approve</button>
-                  <button className={`${ui.btnSm}`} onClick={()=>handleEdit(p)}>Edit</button>
-                  <button className={`${ui.btnSm} ${ui.btnDanger}`} onClick={()=>updateProduct(p.id,'rejected')}>Reject</button>
-                  <button className={`${ui.btnSm} ${ui.btnDanger}`} onClick={()=>handleDelete(p.id)}>Delete</button>
-                </div>
-              </div>
-            ))}
+              ))
+            })()}
           </div>
         )}
         {!loading && tab === 'active' && (
@@ -309,22 +325,30 @@ export default function AdminProductsPage() {
                 </tr>
               </thead>
               <tbody>
-                {active.map(p => (
+                {(() => {
+                  const qv = q.toLowerCase().trim()
+                  const list = active.filter(p => {
+                    const vendorName = p.vendors?.shop_name || ''
+                    const text = `${p.name || ''} ${vendorName} ${p.id} ${p.status || ''}`.toLowerCase()
+                    return qv === '' || text.includes(qv)
+                  })
+                  return list.map(p => (
                   <tr key={p.id}>
-                    <td className={ui.td}>{p.id.slice(0,8)}</td>
-                    <td className={ui.td}>{p.name}</td>
-                    <td className={ui.td}>${Number(p.price||0).toLocaleString()}</td>
-                    <td className={ui.td}>{p.vendors?.shop_name || 'Unknown'}</td>
-                    <td className={ui.td}>{p.status}</td>
-                    <td className={ui.td}>{new Date(p.created_at).toLocaleString()}</td>
-                    <td className={ui.td}>
+                    <td className={ui.td} data-label="ID">{p.id.slice(0,8)}</td>
+                    <td className={ui.td} data-label="Name">{p.name}</td>
+                    <td className={ui.td} data-label="Price">${Number(p.price||0).toLocaleString()}</td>
+                    <td className={ui.td} data-label="Vendor">{p.vendors?.shop_name || 'Unknown'}</td>
+                    <td className={ui.td} data-label="Status">{p.status}</td>
+                    <td className={ui.td} data-label="Created">{new Date(p.created_at).toLocaleString()}</td>
+                    <td className={ui.td} data-label="Actions">
                       <div style={{ display:'flex', gap:8 }}>
                         <button className={`${ui.btnSm}`} onClick={()=>handleEdit(p)}>Edit</button>
                         <button className={`${ui.btnSm} ${ui.btnDanger}`} onClick={()=>handleDelete(p.id)}>Delete</button>
                       </div>
                     </td>
                   </tr>
-                ))}
+                  ))
+                })()}
               </tbody>
             </table>
           </div>
